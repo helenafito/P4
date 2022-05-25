@@ -1,3 +1,4 @@
+
 #include <unistd.h> //getopt function, to parse options
 #include <iostream>
 #include <fstream>
@@ -29,8 +30,9 @@ float verify(const GMM &gmm_candidate, const fmatrix &dat) {
     lprobcand is an informative values to be printed as debug information.
     The decision is based on the returned value
    */
-
   float score = 0.0F;
+  score = gmm_candidate.logprob(dat);
+
   return score;
 }
 
@@ -40,10 +42,11 @@ float verify(const GMM &gmm_candidate, const GMM & gmm_world, const fmatrix &dat
 	     float &lprobcand, float &lprobbackground) {
 
   //TODO: implement verification score based on gmm of the candidate and 'world' model
-  float score = 0.0F;
-  lprobcand = 0.0F;
-  lprobbackground = 0.0F;
-
+ 
+  lprobcand = gmm_candidate.logprob(dat);
+  lprobbackground = gmm_world.logprob(dat);
+   float score = lprobcand - lprobbackground;
+  
 
   return score;
 
@@ -99,7 +102,7 @@ int main(int argc, const char *argv[]) {
       return -1;
     }
   }
-
+    
 
   /* In this implementation, we assume that the world model is a gmm (gmm_world)
      and that each candidate has its onw gmm */
@@ -144,7 +147,7 @@ int main(int argc, const char *argv[]) {
 int read_gmms(const Directory &dir, const Ext &ext, const vector<string> &filenames, map<string, GMM> &vgmm) {
   vgmm.clear();
   GMM gmm;
-
+  
   for (unsigned int i=0; i<filenames.size(); ++i) {
     string path = dir + filenames[i] + ext;
     ifstream ifs(path.c_str(), ios::binary);
@@ -163,7 +166,7 @@ int read_gmms(const Directory &dir, const Ext &ext, const vector<string> &filena
 
 int usage(const char *progname, int err)  {
   cerr << "Usage: " << progname << " [options] list_gmm list_of_test_files list_of_candidate\n\n";
-
+  
   cerr << "Options can be: \n"
        << "  -d dir\tDirectory of the feature files (def. \".\")\n"
        << "  -e ext\tExtension of the feature files (def. \"" << DEF_FEAT_EXT << "\")\n"
@@ -223,7 +226,7 @@ int read_options(int ArgC, const char *ArgV[], vector<Directory> &input_dirs, ve
   //advance argc and argv to skip read options
   ArgC -= optind;
   ArgV += optind;
-
+  
   if (ArgC != 3)
     return -3;
 
@@ -241,7 +244,7 @@ int read_options(int ArgC, const char *ArgV[], vector<Directory> &input_dirs, ve
       bFound = true;
   }
   is.close();
-
+  
   if (!bFound and not world_name.empty())
     gmm_filenames.push_back(world_name);
 

@@ -25,7 +25,7 @@ int read_options(int ArgC, const char *ArgV[], Directory &input_dir, Ext &input_
 		 int &init_method, unsigned int &verbose);
 
 int main(int argc, const char *argv[]) {
-
+  
   Directory input_dir;
   Ext input_ext(DEF_INPUT_EXT);
   vector<string> filenames;
@@ -33,7 +33,7 @@ int main(int argc, const char *argv[]) {
   Filename gmm_filename(DEF_GMMFILE);
   unsigned int init_iterations=DEF_ITERATIONS, em_iterations=DEF_ITERATIONS;
   float init_threshold=DEF_THR, em_threshold=DEF_THR;
-  int init_method=0;
+  int init_method=2;
 
   ///Read command line options
   int retv = read_options(argc, argv, input_dir, input_ext, filenames,
@@ -54,26 +54,30 @@ int main(int argc, const char *argv[]) {
   /// 
   /// Other alternatives are: vq, em_split... See the options of the program and place each
   /// initicialization accordingly.
+  
   switch (init_method) {
   case 0:
+  gmm.random_init (data ,nmix);
     break;
   case 1:
+   gmm.vq_lbg(data, nmix, init_iterations, init_threshold, verbose);
     break;
   case 2:
+  gmm.em_split(data,nmix,init_iterations,init_threshold,verbose);
     break;
   default:
     ;
   }
 
   /// \TODO Apply EM to estimate GMM parameters (complete the funcion in gmm.cpp)
-
+  gmm.em (data , em_iterations, em_threshold, verbose);
 
   //Create directory, if it is needed
   gmm_filename.checkDir();
   //Save gmm
   ofstream ofs(gmm_filename.c_str(), ios::binary);
   ofs << gmm;
-
+  
   bool show_gmm=false;
   if (show_gmm)
     gmm.print(cout);
@@ -85,7 +89,7 @@ int usage(const char *progname, int err)  {
   cerr << "\n";
   cerr << "Usage: " << progname << " [options] list_of_train_files\n";
   cerr << "Usage: " << progname << " [options] -F train_file1 ...\n\n";
-
+  
   cerr << "Options can be: \n"
        << "  -d dir\tDirectory of the input files (def. \".\")\n"
        << "  -e ext\tExtension of the input files (def. \"" << DEF_INPUT_EXT << "\")\n"

@@ -27,8 +27,15 @@ int classify(const vector<GMM> &vgmm, const fmatrix &dat, float &maxlprob) {
 
   //TODO .. assign maxind to the best index of vgmm
   //for each gmm, call logprob. Implement this function in gmm.cpp
+  //DONE
   maxind = 0;
-
+  for (unsigned int ind = 0; ind < vgmm.size(); ind ++){
+    lprob = vgmm[ind].logprob(dat);
+    if ( lprob > maxlprob){
+      maxlprob = lprob;
+      maxind = ind;
+    }
+  }
 
   return maxind;
 }
@@ -96,7 +103,7 @@ int main(int argc, const char *argv[]) {
 int read_gmms(const Directory &dir, const Ext &ext, const vector<string> &filenames, vector<GMM> &vgmm) {
   vgmm.clear();
   GMM gmm;
-
+  
   for (unsigned int i=0; i<filenames.size(); ++i) {
     string path = dir + filenames[i] + ext;
     ifstream ifs(path.c_str(), ios::binary);
@@ -115,7 +122,7 @@ int read_gmms(const Directory &dir, const Ext &ext, const vector<string> &filena
 
 int usage(const char *progname, int err)  {
   cerr << "Usage: " << progname << " [options] list_gmm list_of_test_files\n\n";
-
+  
   cerr << "Options can be: \n"
        << "  -d dir\tDirectory of the feature files (def. \".\")\n"
        << "  -e ext\tExtension of the feature files (def. \"" << DEF_FEAT_EXT << "\")\n"
@@ -168,7 +175,7 @@ int read_options(int ArgC, const char *ArgV[], vector<Directory> &input_dirs, ve
   //advance argc and argv to skip read options
   ArgC -= optind;
   ArgV += optind;
-
+  
   if (ArgC != 2)
     return -3;
 
@@ -192,6 +199,6 @@ int read_options(int ArgC, const char *ArgV[], vector<Directory> &input_dirs, ve
   while (is >> s)
     input_filenames.push_back(s);
   is.close();
-
+  
   return 0;      
-     }
+}

@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Base name for temporary files
 base=/tmp/$(basename $0).$$ 
 
@@ -9,12 +10,12 @@ cleanup() {
 }
 
 if [[ $# != 4 ]]; then
-   echo "$0 lpc_order lpcc_order input.wav output.lpcc"
+   echo "$0 lpcc_order filter_bank_order input.wav output.lpcc"
    exit 1
 fi
 
-lpc_order=$1
-lpcc_order=$2
+mfcc_order=$1
+filter_bank_order=$2
 inputfile=$3
 outputfile=$4
 
@@ -24,27 +25,25 @@ if [[ $UBUNTU_SPTK == 1 ]]; then
    X2X="sptk x2x"
    FRAME="sptk frame"
    WINDOW="sptk window"
-   LPC="sptk lpc"
-   LPCC="sptk lpc2c"
+   MFCC="sptk mfcc"
 else
    # or install SPTK building it from its source
    X2X="x2x"
    FRAME="frame"
    WINDOW="window"
-   LPC="lpc"
-   LPCC="lpc2c"
+   MFCC="mfcc"
 fi
 
 # Main command for feature extration
 sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
-	$LPC -l 240 -m $lpc_order | $LPCC -m $lpc_order -M $lpcc_order > $base.lp
+	 $LPC -l 240 -m $lpc_order | $LPC2C -m $lpc_order -M $nceps > $base.lpcc
 
 # Our array files need a header with the number of cols and rows:
-ncol=$((lpcc_order+1)) # lpcc p =>  (gain a1 a2 ... ap) 
-nrow=`$X2X +fa < $base.lp | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
+ncol=$((mfcc_order)) # mfcc p =>  (a1 a2 ... ap) 
+nrow=`$X2X +fa < $base.lpcc | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
 
 # Build fmatrix file by placing nrow and ncol in front, and the data after them
 echo $nrow $ncol | $X2X +aI > $outputfile
-cat $base.lp >> $outputfile
+cat $base.LPcc >> $outputfile
 
 exit 
