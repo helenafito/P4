@@ -33,7 +33,7 @@ int main(int argc, const char *argv[]) {
   Filename gmm_filename(DEF_GMMFILE);
   unsigned int init_iterations=DEF_ITERATIONS, em_iterations=DEF_ITERATIONS;
   float init_threshold=DEF_THR, em_threshold=DEF_THR;
-  int init_method=0;
+  int init_method=2;
 
   ///Read command line options
   int retv = read_options(argc, argv, input_dir, input_ext, filenames,
@@ -60,8 +60,10 @@ int main(int argc, const char *argv[]) {
   gmm.random_init (data ,nmix);
     break;
   case 1:
+   gmm.vq_lbg(data, nmix, init_iterations, init_threshold, verbose);
     break;
   case 2:
+  gmm.em_split(data,nmix,init_iterations,init_threshold,verbose);
     break;
   default:
     ;
