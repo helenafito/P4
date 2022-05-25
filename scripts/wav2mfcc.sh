@@ -35,7 +35,7 @@ fi
 
 # Main command for feature extration
 sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
-	$MFCC -s 8000 -w 0 -l 240 -m $mfcc_order -n $filter_bank_order > $base.mfcc
+	$MFCC -s 8 -w 0 -l 240 -m $mfcc_order -n $filter_bank_order > $base.mfcc
 
 # Our array files need a header with the number of cols and rows:
 ncol=$((mfcc_order)) # mfcc p =>  (a1 a2 ... ap) 
@@ -45,4 +45,4 @@ nrow=`$X2X +fa < $base.mfcc | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
 echo $nrow $ncol | $X2X +aI > $outputfile
 cat $base.mfcc >> $outputfile
 
-exit
+exit 
