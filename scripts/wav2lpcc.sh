@@ -14,7 +14,7 @@ if [[ $# != 4 ]]; then
    exit 1
 fi
 
-mfcc_order=$1
+lpc_order=$1
 filter_bank_order=$2
 inputfile=$3
 outputfile=$4
@@ -25,13 +25,15 @@ if [[ $UBUNTU_SPTK == 1 ]]; then
    X2X="sptk x2x"
    FRAME="sptk frame"
    WINDOW="sptk window"
-   MFCC="sptk mfcc"
+   LPC="sptk lpc"
+   LPC2C="sptk lpc2c"
 else
    # or install SPTK building it from its source
    X2X="x2x"
    FRAME="frame"
    WINDOW="window"
-   MFCC="mfcc"
+   LPC="sptk lpc"
+   LPC2C="sptk lpc2c"
 fi
 
 # Main command for feature extration
@@ -44,6 +46,6 @@ nrow=`$X2X +fa < $base.lpcc | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
 
 # Build fmatrix file by placing nrow and ncol in front, and the data after them
 echo $nrow $ncol | $X2X +aI > $outputfile
-cat $base.LPcc >> $outputfile
+cat $base.lpcc >> $outputfile
 
 exit 
