@@ -33,18 +33,53 @@ ejercicios indicados.
   principal (`sox`, `$X2X`, `$FRAME`, `$WINDOW` y `$LPC`). Explique el significado de cada una de las 
   opciones empleadas y de sus valores.
 
+ sox es el comando principal de extracción de carateristicas: 
+  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 | $LPC -l 240 -m $lpc_order > $base.lp
+  Para poder saber que hace cada comando hemos consultado con el manual de SPTK.
+  Las primeras opciones corresponden a las opciones del fichero de entrada. 
+  La opción -t corresponde al tipo de archivo de audio, la opción -e al tipo de encoding, en nuestro caso signed.
+  -b 16 ens informa que la mida de la mostra es de 16 bits.
+  X2X convierte la señal de su formato en el input a otro tipo de formato, y lo envia a un standard output. En nuestro caso lo concertimos a short.
+  El comando FRAME convierte una sequencia de señales input a una serie de frames (que pueden estar sobrepuestos) con en nuestro caso, longitud 240 y periodo 80.
+  La opción WINDOW enventana la señal con una ventana de Blackman de longitud 240
+  LPC calcula los coeficientes de predicción lineal de tamaño 240 y de orden el de la variable lpc_order, los coeficientes se escriben en el fichero base.lp.
+
+
+
+
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
   salida de SPTK (líneas 45 a 47 del script `wav2lp.sh`).
 
-  * ¿Por qué es conveniente usar este formato (u otro parecido)? Tenga en cuenta cuál es el formato de
-    entrada y cuál es el de resultado.
+# Our array files need a header with the number of cols and rows:
+ncol=$((lpc_order+1)) # lpc p =>  (gain a1 a2 ... ap) 
+nrow=`$X2X +fa < $base.lp | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
+
+Las filas de nuestra matriz corresponden a las tramas y las columnas a los Coeficientes. 
+
+Para calcular las columnas cogemos el orden del lpc +1 , porque no podemos tener en cuenta el primer elemento , ya que se usa para guardar la ganancia del predictor.
+
+Seguidamente, para calcular las filas, convertimos la señal a ASCII mediante la opción +fa, wc -l cuenta las filas del fichero y utilizamos el comando perl, programa que se utiliza para la manipulación de cadenas de caracteres.
+
+
+  * ¿Por qué es conveniente usar este formato (u otro parecido)? Tenga en cuenta cuál es el formato de entrada y cuál es el de resultado.
+
+Nos permite ver en cada columna (entre corchetes) el numero de cada trama, y en cada columna los coeficientes ordenados.
+
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
 
+sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+  $LPC -l 240 -m $lpc_order | $LPCC -m $lpc_order -M $lpcc_order > $base.lp
+
+
+
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>:
 
+
+sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+  $MFCC -s 8 -w 0 -l 240 -m $mfcc_order -n $filter_bank_order > $base.mfcc
 ### Extracción de características.
 
 - Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones

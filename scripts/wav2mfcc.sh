@@ -18,7 +18,6 @@ filter_bank_order=$2
 inputfile=$3
 outputfile=$4
 
-
 if [[ $UBUNTU_SPTK == 1 ]]; then
    # In case you install SPTK using debian package (apt-get)
    X2X="sptk x2x"
