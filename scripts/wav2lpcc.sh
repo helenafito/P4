@@ -32,8 +32,7 @@ else
    X2X="x2x"
    FRAME="frame"
    WINDOW="window"
-   LPC="sptk lpc"
-   LPC2C="sptk lpc2c"
+   MFCC="mfcc"
 fi
 
 # Main command for feature extration
@@ -46,6 +45,6 @@ nrow=`$X2X +fa < $base.lpcc | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
 
 # Build fmatrix file by placing nrow and ncol in front, and the data after them
 echo $nrow $ncol | $X2X +aI > $outputfile
-cat $base.lpcc >> $outputfile
+cat $base.LPcc >> $outputfile
 
 exit 
