@@ -112,7 +112,7 @@ Si nos fijamos, la grafica de lp tiene mucha mas densidad de puntos en la zona d
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
   
   <img src="lp.png" width="640" align="center">
-  
+
 
   <img src="lpcc.png" width="640" align="cente">
 
@@ -129,6 +129,7 @@ Si nos fijamos, la grafica de lp tiene mucha mas densidad de puntos en la zona d
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
+
 Para calcular LPCC se necesitan como mínimo 13 coeficientes, y para MFCC se necesitan 13 coeficientes y entre 24 y 40 filtros.
 
 ### Entrenamiento y visualización de los GMM.
