@@ -151,17 +151,26 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
   |---------------|:----:|:----:|:----:|
   | Tasa de error |      |      |      |
   | Tasa de error | 10.57% | 0.64% | 1.66% |
-  
+
 ### Verificación del locutor.
   
 
 Complete el código necesario para realizar verificación del locutor y optimice sus parámetros.
 
-- Inserte una tabla con el *score* obtenido con su mejor sistema de verificación del locutor en la tarea
-  de verificación de SPEECON. La tabla debe incluir el umbral óptimo, el número de falsas alarmas y de
-  pérdidas, y el score obtenido usando la parametrización que mejor resultado le hubiera dado en la tarea
-  de reconocimiento.
+- Inserte una tabla con el *score* obtenido con su mejor sistema de verificación del locutor en la tarea de verificación de SPEECON. La tabla debe incluir el umbral óptimo, el número de falsas alarmas y de pérdidas, y el score obtenido usando la parametrización que mejor resultado le hubiera dado en la tarea de reconocimiento.
  
+
+ |                 | LP | LPCC | MFCC |
+  |-----------------|:----:|:----:|:----:|
+  | Umbral óptimo   | xx | xx | xx |
+  | Pérdidas        | xx/250 = xx | xx/250 = xx | xx/250 = xx |
+  | Falsas Alarmas  | xx/1000 = 0 | xx/1000 = xx | xx/1000 = xx|
+  | Cost Detection  | xx | xx | xx |
+  | Umbral óptimo   | 0.517695239607905 | 0.276933713207707 | 0.390129901113577 |
+  | Pérdidas        | 92/250 = 0.3680 | 7/250 = 0.0280 | 17/250 = 0.0680 |
+  | Falsas Alarmas  | 13/1000 = 0.0130 | 1/1000 = 0.0010 | 2/1000 = 0.0020|
+  | Cost Detection  | 60.8 | 13.9 | 17.7 |
+
 ### Test final
 
 - Adjunte, en el repositorio de la práctica, los ficheros `class_test.log` y `verif_test.log` 
