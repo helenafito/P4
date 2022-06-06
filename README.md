@@ -141,6 +141,8 @@ Complete el código necesario para entrenar modelos GMM.
 
 - Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor para sus dos primeros coeficientes de MFCC.
   
+  <img src="IMA2.png" width="640" align="center">
+  
 - Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
   del modelado GMM para diferenciar las señales de uno y otro.
@@ -169,9 +171,9 @@ Complete el código necesario para realizar verificación del locutor y optimice
   | Pérdidas        | xx/250 = xx | xx/250 = xx | xx/250 = xx |
   | Falsas Alarmas  | xx/1000 = 0 | xx/1000 = xx | xx/1000 = xx|
   | Cost Detection  | xx | xx | xx |
-  | Umbral óptimo   | 0.517695239607905 | 0.276933713207707 | 0.390129901113577 |
-  | Pérdidas        | 92/250 = 0.3680 | 7/250 = 0.0280 | 17/250 = 0.0680 |
-  | Falsas Alarmas  | 13/1000 = 0.0130 | 1/1000 = 0.0010 | 2/1000 = 0.0020|
+  | Umbral óptimo   | 0.536560029163596 | 0.514011253495 | 0.736030169653393 |
+  | Pérdidas        |  94/250=0.3760 | 10/250=0.0400 | 24/250=0.0960 |
+  | Falsas Alarmas  | 33/1000=0.0330 | 11/1000=0.0110| 9/1000=0.0090|
   | Cost Detection  | 60.8 | 13.9 | 17.7 |
 
 ### Test final
