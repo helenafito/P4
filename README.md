@@ -111,9 +111,9 @@ Si nos fijamos, la grafica de lp tiene mucha mas densidad de puntos en la zona d
 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
   
-  img src="lp.png" width="640" align="center
-  img src="lpcc.png" width="640" align="center
-  img src="mfcc.png" width="640" align="center
+  <img src="lp.png" width="640" align="center>
+  <img src="lpcc.png" width="640" align="center>
+  <img src="mfcc.png" width="640" align="center>
 
   |                        | LP          | LPCC        | MFCC     |
   |------------------------|:-----------:|:-----------:|:--------:|
