@@ -127,6 +127,10 @@ Si nos fijamos, la grafica de lp tiene mucha mas densidad de puntos en la zona d
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
   
+
+  Los resultados reiteran lo que hemos podido observar, en las gràficas, ya que  (en valor absoluto, la rho de lp es mayor, por lo tanto los valores esta mas correlados (menos información). 
+
+  
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
 
 Para calcular LPCC se necesitan como mínimo 13 coeficientes, y para MFCC se necesitan 13 coeficientes y entre 24 y 40 filtros.
