@@ -62,6 +62,8 @@ Seguidamente, para calcular las filas, convertimos la señal a ASCII mediante la
 
 
   * ¿Por qué es conveniente usar este formato (u otro parecido)? Tenga en cuenta cuál es el formato de entrada y cuál es el de resultado.
+  
+   <img src="ima1.png" width="640" align="center">
 
 Nos permite ver en cada columna (entre corchetes) el numero de cada trama, y en cada columna los coeficientes ordenados.
 
@@ -82,12 +84,28 @@ sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WIND
   $MFCC -s 8 -w 0 -l 240 -m $mfcc_order -n $filter_bank_order > $base.mfcc
 ### Extracción de características.
 
-- Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones
-  para todas las señales de un locutor.
+- Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones para todas las señales de un locutor.
   
+  <img src="gmmlp.png" width="640" align="center">
+
+<img src="gmmlpcc.png" width="640" align="center">
+
+<img src="gmmmmfc.png" width="640" align="center">
+
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
+
+  lp: 
+plot_gmm_feat -x 2 -y 3 -g green work/gmm/lp/SES002.gmm work/lp/BLOCK00/SES002/SA002S*
+lpcc:
+plot_gmm_feat -x 2 -y 3 -g green work/gmm/lpcc/SES002.gmm work/lpcc/BLOCK00/SES002/SA002S*
+mfcc:
+plot_gmm_feat -x 2 -y 3 -g green work/gmm/mfcc/SES002.gmm work/mfcc/BLOCK00/SES002/SA002S*
+
   + ¿Cuál de ellas le parece que contiene más información?
+
+Las graficas que mas información contienen son las de mfcc y lpcc porque son las que más dispersos tienen los puntos, es decir estan mas incorreladas.
+Si nos fijamos, la grafica de lp tiene mucha mas densidad de puntos en la zona del 50%, que la lpcc y la mfcc.
 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
@@ -99,13 +117,13 @@ sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WIND
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
+Para calcular LPCC se necesitan como mínimo 13 coeficientes, y para MFCC se necesitan 13 coeficientes y entre 24 y 40 filtros.
 
 ### Entrenamiento y visualización de los GMM.
 
 Complete el código necesario para entrenar modelos GMM.
 
-- Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor
-  para sus dos primeros coeficientes de MFCC.
+- Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor para sus dos primeros coeficientes de MFCC.
   
 - Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
@@ -119,6 +137,7 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
 
 ### Verificación del locutor.
+   <img src="cap1.png" width="640" align="center">
 
 Complete el código necesario para realizar verificación del locutor y optimice sus parámetros.
 
