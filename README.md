@@ -109,12 +109,15 @@ plot_gmm_feat -x 2 -y 3 -g green work/gmm/mfcc/SES002.gmm work/mfcc/BLOCK00/SES0
 Las graficas que mas información contienen son las de mfcc y lpcc porque son las que más dispersos tienen los puntos, es decir estan mas incorreladas.
 Si nos fijamos, la grafica de lp tiene mucha mas densidad de puntos en la zona del 50%, que la lpcc y la mfcc.
 
-- Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
-  parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
+- Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
+  
+  img src="lp.png" width="640" align="center
+  img src="lpcc.png" width="640" align="center
+  img src="mfcc.png" width="640" align="center
 
-  |                        | LP   | LPCC | MFCC |
-  |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] |      |      |      |
+  |                        | LP          | LPCC        | MFCC     |
+  |------------------------|:-----------:|:-----------:|:--------:|
+  | &rho;<sub>x</sub>[2,3] |   -0,815983 |  0,204709   | -0,187077|   |
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
   
