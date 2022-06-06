@@ -97,8 +97,10 @@ sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WIND
 
   lp: 
 plot_gmm_feat -x 2 -y 3 -g green work/gmm/lp/SES002.gmm work/lp/BLOCK00/SES002/SA002S*
+
 lpcc:
 plot_gmm_feat -x 2 -y 3 -g green work/gmm/lpcc/SES002.gmm work/lpcc/BLOCK00/SES002/SA002S*
+
 mfcc:
 plot_gmm_feat -x 2 -y 3 -g green work/gmm/mfcc/SES002.gmm work/mfcc/BLOCK00/SES002/SA002S*
 
