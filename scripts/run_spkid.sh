@@ -199,8 +199,7 @@ for cmd in $*; do
 	   # recognized is lists/final/class.test
         compute_$FEAT $db_test $lists/final/class.test
         (gmm_classify -d  $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm  $lists/gmm.list $lists/final/class.test |
-            tee $w/class_test_${FEAT}_${name_exp}.log ) || exit 1 
-            'print "$F[0]\t$F[1]\n";' $w/class_test_${FEAT}_${name_exp}.log | tee class_test.log
+            tee class_test.log ) || exit 1 
    
    elif [[ $cmd == finalverif ]]; then
        ## @file
@@ -210,11 +209,11 @@ for cmd in $*; do
 	   # is lists/final/verif.test, and the list of users claimed by the test files is
 	   # lists/final/verif.test.candidates
        compute_$FEAT $db_test $lists/final/verif.test
-        (gmm_verify -d  $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world $lists/gmm.list $lists/final/verif.test $lists/final/verif.test.candidates |
-            tee $w/final_verif_${FEAT}_${name_exp}.log) || exit 1 
+         gmm_verify -d work/$FEAT -e $FEAT -D work/gmm/$FEAT -E gmm -w $world lists/final/verif.users lists/final/verif.test lists/final/verif.test.candidates | 
+            tee $w/verif_test.log
             perl -ane 'print "$F[0]\t$F[1]\t";
-                if ($F[2] > 0.493777196500208) {print "1\n"}
-                else {print "0\n"}' $w/final_verif_${FEAT}_${name_exp}.log | tee verif_test.log
+                if ($F[2] > 0.0.514011253495) {print "1\n"}
+                else {print "0\n"}' $w/verif_test.log | tee verif_test.log
    
    # If the command is not recognize, check if it is the name
    # of a feature and a compute_$FEAT function exists.
