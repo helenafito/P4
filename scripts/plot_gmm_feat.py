@@ -193,4 +193,3 @@ if __name__ == '__main__':
         limits = None
 
     plotGMM(fileGMM, xDim, yDim, percents, colorGmm, filesFeat, colorFeat, limits, 111)
-

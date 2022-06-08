@@ -44,10 +44,23 @@ ejercicios indicados.
   La opción WINDOW enventana la señal con una ventana de Blackman de longitud 240
   LPC calcula los coeficientes de predicción lineal de tamaño 240 y de orden el de la variable lpc_order, los coeficientes se escriben en el fichero base.lp.
 
+ sox es el comando principal de extracción de carateristicas: 
+  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 | $LPC -l 240 -m $lpc_order > $base.lp
+  Para poder saber que hace cada comando hemos consultado con el manual de SPTK.
+  Las primeras opciones corresponden a las opciones del fichero de entrada. 
+  La opción -t corresponde al tipo de archivo de audio, la opción -e al tipo de encoding, en nuestro caso signed.
+  -b 16 ens informa que la mida de la mostra es de 16 bits.
+  X2X convierte la señal de su formato en el input a otro tipo de formato, y lo envia a un standard output. En nuestro caso lo concertimos a short.
+  El comando FRAME convierte una sequencia de señales input a una serie de frames (que pueden estar sobrepuestos) con en nuestro caso, longitud 240 y periodo 80.
+  La opción WINDOW enventana la señal con una ventana de Blackman de longitud 240
+  LPC calcula los coeficientes de predicción lineal de tamaño 240 y de orden el de la variable lpc_order, los coeficientes se escriben en el fichero base.lp.
+
+
+
+
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
   salida de SPTK (líneas 45 a 47 del script `wav2lp.sh`).
 
-# Our array files need a header with the number of cols and rows:
 ncol=$((lpc_order+1)) # lpc p =>  (gain a1 a2 ... ap) 
 nrow=`$X2X +fa < $base.lp | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
 
@@ -57,70 +70,119 @@ Para calcular las columnas cogemos el orden del lpc +1 , porque no podemos tener
 
 Seguidamente, para calcular las filas, convertimos la señal a ASCII mediante la opción +fa, wc -l cuenta las filas del fichero y utilizamos el comando perl, programa que se utiliza para la manipulación de cadenas de caracteres.
 
-  * ¿Por qué es conveniente usar este formato (u otro parecido)? Tenga en cuenta cuál es el formato de
-    entrada y cuál es el de resultado.
-//Insertar foto que te he enviado 
+
+  * ¿Por qué es conveniente usar este formato (u otro parecido)? Tenga en cuenta cuál es el formato de entrada y cuál es el de resultado.
+  
+   <img src="ima1.png" width="640" align="center">
+
 Nos permite ver en cada columna (entre corchetes) el numero de cada trama, y en cada columna los coeficientes ordenados.
+
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
 
-  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
-	$LPC -l 240 -m $lpc_order | $LPCC -m $lpc_order -M $lpcc_order > $base.lp
+sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+  $LPC -l 240 -m $lpc_order | $LPCC -m $lpc_order -M $lpcc_order > $base.lp
+
+
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>:
 
-sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
-	$MFCC -s 8 -w 0 -l 240 -m $mfcc_order -n $filter_bank_order > $base.mfcc
 
+sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+  $MFCC -s 8 -w 0 -l 240 -m $mfcc_order -n $filter_bank_order > $base.mfcc
 ### Extracción de características.
 
-- Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones
-  para todas las señales de un locutor.
+- Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones para todas las señales de un locutor.
   
+  <img src="gmmlp.png" width="640" align="center">
+
+<img src="gmmlpcc.png" width="640" align="center">
+
+<img src="gmmmmfc.png" width="640" align="center">
+
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
+
+  lp: 
+plot_gmm_feat -x 2 -y 3 -g green work/gmm/lp/SES002.gmm work/lp/BLOCK00/SES002/SA002S*
+
+lpcc:
+plot_gmm_feat -x 2 -y 3 -g green work/gmm/lpcc/SES002.gmm work/lpcc/BLOCK00/SES002/SA002S*
+
+mfcc:
+plot_gmm_feat -x 2 -y 3 -g green work/gmm/mfcc/SES002.gmm work/mfcc/BLOCK00/SES002/SA002S*
+
   + ¿Cuál de ellas le parece que contiene más información?
 
-- Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
-  parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
+Las graficas que mas información contienen son las de mfcc y lpcc porque son las que más dispersos tienen los puntos, es decir estan mas incorreladas.
+Si nos fijamos, la grafica de lp tiene mucha mas densidad de puntos en la zona del 50%, que la lpcc y la mfcc.
 
-  |                        | LP   | LPCC | MFCC |
-  |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] |      |      |      |
+- Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
+  
+  <img src="lp.png" width="640" align="center">
+
+
+  <img src="lpcc.png" width="640" align="cente">
+
+  <img src="mfcc.png" width="640" align="center">
+
+
+
+
+
+  |                        | LP          | LPCC        | MFCC     |
+  |------------------------|:-----------:|:-----------:|:--------:|
+  | &rho;<sub>x</sub>[2,3] |   -0,815983 |  0,204709   | -0,187077|   |
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
   
+
+  Los resultados reiteran lo que hemos podido observar, en las gràficas, ya que  (en valor absoluto, la rho de lp es mayor, por lo tanto los valores esta mas correlados (menos información). 
+
+
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
+
+Para calcular LPCC se necesitan como mínimo 13 coeficientes, y para MFCC se necesitan 13 coeficientes y entre 24 y 40 filtros.
 
 ### Entrenamiento y visualización de los GMM.
 
 Complete el código necesario para entrenar modelos GMM.
 
-- Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor
-  para sus dos primeros coeficientes de MFCC.
+- Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor para sus dos primeros coeficientes de MFCC.
   
-- Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica
-  de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
-  del modelado GMM para diferenciar las señales de uno y otro.
+  <img src="IMA2.png" width="640" align="center">
+
+- Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad del modelado GMM para diferenciar las señales de uno y otro.
+
+<img src="IMA3.png" width="640" align="center">
 
 ### Reconocimiento del locutor.
 
 Complete el código necesario para realizar reconociminto del locutor y optimice sus parámetros.
 
-- Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos
-  SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
+- Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
+
+  |               | LP   | LPCC | MFCC |
+  |---------------|:----:|:----:|:----:|
+  | Tasa de error | 10.57% | 0.64% | 1.66% |
 
 ### Verificación del locutor.
+  
 
 Complete el código necesario para realizar verificación del locutor y optimice sus parámetros.
 
-- Inserte una tabla con el *score* obtenido con su mejor sistema de verificación del locutor en la tarea
-  de verificación de SPEECON. La tabla debe incluir el umbral óptimo, el número de falsas alarmas y de
-  pérdidas, y el score obtenido usando la parametrización que mejor resultado le hubiera dado en la tarea
-  de reconocimiento.
+- Inserte una tabla con el *score* obtenido con su mejor sistema de verificación del locutor en la tarea de verificación de SPEECON. La tabla debe incluir el umbral óptimo, el número de falsas alarmas y de pérdidas, y el score obtenido usando la parametrización que mejor resultado le hubiera dado en la tarea de reconocimiento.
  
+
+ |                 | LP | LPCC | MFCC |
+  |-----------------|:----:|:----:|:----:|
+  | Umbral óptimo   | 0.536560029163596 | 0.514011253495 | 0.736030169653393 |
+  | Pérdidas        |  94/250=0.3760 | 10/250=0.0400 | 24/250=0.0960 |
+  | Falsas Alarmas  | 33/1000=0.0330 | 11/1000=0.0110| 9/1000=0.0090|
+  | Cost Detection  | 60.8 | 13.9 | 17.7 |
+
 ### Test final
 
 - Adjunte, en el repositorio de la práctica, los ficheros `class_test.log` y `verif_test.log` 
