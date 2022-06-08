@@ -14,14 +14,9 @@ if [[ $# != 4 ]]; then
 fi
 
 lpc_order=$1
-<<<<<<< HEAD
 lpcc_order=$2
-=======
-filter_bank_order=$2
->>>>>>> d3e27327de39f48d9eb5fa12a5d6c1273b6c843e
 inputfile=$3
 outputfile=$4
-
 
 if [[ $UBUNTU_SPTK == 1 ]]; then
    # In case you install SPTK using debian package (apt-get)
@@ -29,11 +24,7 @@ if [[ $UBUNTU_SPTK == 1 ]]; then
    FRAME="sptk frame"
    WINDOW="sptk window"
    LPC="sptk lpc"
-<<<<<<< HEAD
    LPCC="sptk lpc2c"
-=======
-   LPC2C="sptk lpc2c"
->>>>>>> d3e27327de39f48d9eb5fa12a5d6c1273b6c843e
 else
    # or install SPTK building it from its source
    X2X="x2x"
@@ -53,10 +44,6 @@ nrow=`$X2X +fa < $base.lp | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
 
 # Build fmatrix file by placing nrow and ncol in front, and the data after them
 echo $nrow $ncol | $X2X +aI > $outputfile
-<<<<<<< HEAD
 cat $base.lp >> $outputfile
-=======
-cat $base.lpcc >> $outputfile
->>>>>>> d3e27327de39f48d9eb5fa12a5d6c1273b6c843e
 
-exit 
+exit
